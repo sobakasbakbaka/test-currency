@@ -1,4 +1,4 @@
-interface CurrencyData {
+export interface CurrencyData {
   ID: string;
   NumCode: string;
   CharCode: string;

@@ -14,6 +14,6 @@ export const fetchCurrencies = async (): Promise<CurrencyApiResponse> => {
     return await response.json();
   } catch (error) {
     console.error("Error fetching currencies", error);
-    throw Error;
+    throw new Error("Failed to fetch currencies");
   }
 };

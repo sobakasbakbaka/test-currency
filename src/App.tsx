@@ -1,40 +1,16 @@
-import { useEffect, useState } from "react";
-import { fetchCurrencies } from "@/services/currencyApi";
-import { CurrencyApiResponse } from "@/interfaces/Currency";
-import { Table } from "@mantine/core";
+import { CurrencyTable } from "@/components/CurrencyTable";
+import { useCurrencies } from "@/hooks/useCurrencies";
 
 export const App = () => {
-  const [currencies, setCurrencies] = useState<
-    CurrencyApiResponse["Valute"] | null
-  >(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { currencies, error, isLoading } = useCurrencies();
 
-  useEffect(() => {
-    const loadCurrencies = async () => {
-      try {
-        const data = await fetchCurrencies();
-        setCurrencies(data.Valute);
-        console.log(data.Valute);
-      } catch (error) {
-        console.error("Error loading currencies", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    loadCurrencies();
-  }, []);
+  if (isLoading) {
+    return <p>loading...</p>;
+  }
 
-  return (
-    <div>
-      {isLoading && <p>Loading</p>}
-      {JSON.stringify(currencies)}
-      <Table>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th></Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-      </Table>
-    </div>
-  );
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  return <CurrencyTable currencies={currencies} />;
 };
